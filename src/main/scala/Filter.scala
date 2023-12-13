@@ -12,6 +12,7 @@ import org.clulab.struct.Interval
 import java.io.File
 import scala.collection.mutable.Buffer
 import org.clulab.struct.GraphMapNames
+import java.nio.file.{Files, Paths}
 
 case class BioRule(
     rule_name: String,
@@ -198,6 +199,11 @@ object Filter extends App {
           println(s"Failed to decode JSON from $fileName: ${ex.getMessage}")
       }
     }
+  }
+
+  val directoryPath = Paths.get("training_data/")
+  if (!Files.exists(directoryPath)) {
+      Files.createDirectories(directoryPath)
   }
 
   val file = new File("training_data/" + processedRuleName + ".json")
