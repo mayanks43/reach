@@ -33,6 +33,12 @@ lazy val commonSettings = Seq(
   // let’s remove any repositories for optional dependencies in our artifact
   pomIncludeRepository := { _ => false },
 
+  libraryDependencies ++= Seq(
+    "io.circe" %% "circe-core" % "0.14.1",
+    "io.circe" %% "circe-generic" % "0.14.1",
+    "io.circe" %% "circe-parser" % "0.14.1"
+  ),
+
   // mandatory stuff to add to the pom for publishing
   pomExtra :=
     <url>https://github.com/clulab/reach</url>
