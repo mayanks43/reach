@@ -235,6 +235,7 @@ def run(tokenizer):
     device = DEVICE
     model = TextRuleT5Model()
     model.to(device)
+    model.half()
     
     early_stopping = EarlyStopping(
         monitor='val_loss',
@@ -360,7 +361,7 @@ val_rules = dict(itertools.islice(rule_data.items(), train_size, None))
 
 train_rules_size = len([y for x in train_rules.values() for y in x])
 val_rules_size = len([y for x in val_rules.values() for y in x])
-print(train_rules_size, val_rules_size)
+print("Training data size:", train_rules_size, " Validation data size:", val_rules_size)
 
 # params
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
