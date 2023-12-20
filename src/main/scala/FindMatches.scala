@@ -63,11 +63,11 @@ object FindMatches extends App {
       ms.foreach { v =>
         val arg = IntervaltoList(v.tokenInterval)
         if (argName.contains("controlled")) {
-          if (arg == rule.controlled || arg == rule.subcontrolled) {
+          if (arg == rule.subcontrolled) {
             argStatus = argStatus.copy(controlled = true)
           }
         } else if (argName.contains("controller")) {
-          if (arg == rule.controller || arg == rule.subcontroller) {
+          if (arg == rule.subcontroller) {
             argStatus = argStatus.copy(controller = true)
 
           }
@@ -90,7 +90,7 @@ object FindMatches extends App {
           println(s"Rule => ${em.foundBy}")
           println(s"trigger => ${predTrigger}")
           val argStatus = fetchArguments(em, rule)
-          if (rule.trigger == predTrigger || rule.subtrigger == predTrigger) {
+          if (rule.subtrigger == predTrigger) {
             newStatus = newStatus.copy(trigger=true)
             println("Trigger Matched")
           }
@@ -102,7 +102,7 @@ object FindMatches extends App {
             newStatus = newStatus.copy(controller=true)
             println("Controller Matched")
           }
-          if ((rule.trigger == predTrigger || rule.subtrigger == predTrigger) && argStatus.controlled && argStatus.controller) {
+          if (rule.subtrigger == predTrigger && argStatus.controlled && argStatus.controller) {
             newStatus = newStatus.copy(total=true)
             println("Everything Matched")
           }

@@ -72,10 +72,10 @@ object Filter extends App {
               argName match {
                 case "controlled"
                     if IntervaltoList(headInterval) == controlled_indices =>
-                  (controlled ++ headInterval, controller)
+                  (controlled ++ IntervaltoList(headInterval), controller)
                 case "controller"
                     if IntervaltoList(headInterval) == controller_indices =>
-                  (controlled, controller ++ headInterval)
+                  (controlled, controller ++ IntervaltoList(headInterval))
                 case _ => (controlled, controller)
               }
             case (acc, _) => acc
