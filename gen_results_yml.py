@@ -2,7 +2,7 @@ import json
 import re
 
 template_file = "events_master_template.yml"
-results_file = "results.json"
+results_file = "val_results.json"
 
 rules = []
 with open(results_file, "r") as file:
@@ -43,5 +43,5 @@ for rule in rules:
     )
     text += add_tabs_and_reconcatenate(new_rule, 2)
 
-with open("results_events.yml", "w") as file:
+with open("val_results_events.yml", "w") as file:
     file.write(text)

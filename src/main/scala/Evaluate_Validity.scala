@@ -15,7 +15,7 @@ object Evaluate_Validity extends App {
     modifiedParts.mkString("\n")
   }
 
-  val fileName = "results.json"
+  val fileName = "val_results.json"
   val source = Source.fromFile(fileName)
   val jsonString =
       try source.mkString
@@ -33,11 +33,11 @@ object Evaluate_Validity extends App {
           |${addTabsAndReconcatenate(rule.pred0, 4)}
         """.stripMargin
         try {
-          println(rule_yml)
           ExtractorEngine(rule_yml) // Check if a valid Odin rule
           validCount += 1
         } catch {
           case _: Throwable =>
+            println(rule_yml)
             println("Failed")
         }
         totalCount += 1

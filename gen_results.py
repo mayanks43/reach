@@ -453,7 +453,7 @@ print("Getting predictions")
 results = []
 for key, value in val_rules.items():
     print(key)
-    for i in tqdm(range(len(value))):
+    for i in tqdm(range(min(10, len(value)))):
         # Free tokens of the matched sentence
         tokens = value[i].tokens
         # annotated text of the matched sentence
@@ -491,5 +491,5 @@ for key, value in val_rules.items():
             }
         )
 
-with open("results.json", "w") as file:
+with open("val_results.json", "w") as file:
     json.dump(results, file)

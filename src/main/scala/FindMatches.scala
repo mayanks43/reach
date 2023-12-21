@@ -117,7 +117,7 @@ object FindMatches extends App {
     newStatus
   }
 
-  val fileName = "results.json"
+  val fileName = "val_results.json"
   println(s"Initializing Reach")
   val reachSystem = PaperReader.reachSystem
   println(s"Done initializing Reach")
@@ -127,7 +127,7 @@ object FindMatches extends App {
   val jsonString =
     try source.mkString
     finally source.close()
-
+  val boundary = s"\t${"-" * 30}"
   decode[List[GeneratedRule]](jsonString) match {
     case Right(rules) =>
         rules.zipWithIndex.foreach { case (rule, index) =>
@@ -156,6 +156,14 @@ object FindMatches extends App {
             println(s"controlledMatchCount: ${controlledMatchCount}")
             println(s"controllerMatchCount: ${controllerMatchCount}")
             println()
+          } else {
+            println("No match")
+            println(s"Tokens ${rule.tokens.mkString(" ")}\n")
+            println(s"True rule ${rule.rule}\n")
+            println(s"Predicted rule ${rule.pred0}")
+            println(s"Trigger ${rule.trigger} Controlled ${rule.controlled} Controller ${rule.controller}\n")
+            println(s"Subtrigger ${rule.subtrigger} Subcontrolled ${rule.subcontrolled} Subcontroller ${rule.subcontroller}\n")
+            println(s"$boundary\n")
           }
         }
     case Left(ex) =>
