@@ -1,0 +1,49 @@
+from pydantic import BaseModel
+
+class Rule(BaseModel):
+    rule_name: str
+    rule: str
+    trigger: list[int]
+    controlled: list[int]
+    controller: list[int]
+    base_rule_name: str
+    base_rule: str
+    base_trigger: list[int]
+    base_controlled: list[int]
+    base_controller: list[int]
+    base_type: str
+    tokens: list[str]
+    lemmas: list[str]
+    tags: list[str]
+    outgoing: list[str]
+    incoming: list[str]
+    marked_tokens: list[str]
+    annotated_tokens: list[str]
+    base_text: str
+    marked_text: str
+    processed_text: str
+
+class GeneratedRule(BaseModel):
+    rule_name: str
+    rule: str
+    trigger: list[int]
+    controlled: list[int]
+    controller: list[int]
+    base_rule_name: str
+    base_rule: str
+    base_trigger: list[int]
+    base_controlled: list[int]
+    base_controller: list[int]
+    base_type: str
+    tokens: list[str]
+    lemmas: list[str]
+    tags: list[str]
+    outgoing: list[str]
+    incoming: list[str]
+    marked_tokens: list[str]
+    annotated_tokens: list[str]
+    base_text: str
+    marked_text: str
+    processed_text: str
+    pred0: str
+    pred1: str

@@ -18,17 +18,28 @@ import java.nio.file.{Files, Paths}
 
 case class GeneratedRule(
   rule_name: String,
-  tokens: List[String],
-  pred0: String,
-  pred1: String,
   rule: String,
   trigger: List[Int],
   controlled: List[Int],
   controller: List[Int],
-  subtrigger: List[Int],
-  subcontrolled: List[Int],
-  subcontroller: List[Int],
   base_rule_name: String,
+  base_rule: String,
+  base_trigger: List[Int],
+  base_controlled: List[Int],
+  base_controller: List[Int],
+  base_type: String,
+  tokens: List[String],
+  lemmas: List[String],
+  tags: List[String],
+  outgoing: List[String],
+  incoming: List[String],
+  marked_tokens: List[String],
+  annotated_tokens: List[String],
+  base_text: String,
+  marked_text: String,
+  processed_text: String,
+  pred0: String,
+  pred1: String
 )
 
 case class ArgStatus(
@@ -63,11 +74,11 @@ object FindMatches extends App {
       ms.foreach { v =>
         val arg = IntervaltoList(v.tokenInterval)
         if (argName.contains("controlled")) {
-          if (arg == rule.subcontrolled) {
+          if (arg == rule.controlled) {
             argStatus = argStatus.copy(controlled = true)
           }
         } else if (argName.contains("controller")) {
-          if (arg == rule.subcontroller) {
+          if (arg == rule.controller) {
             argStatus = argStatus.copy(controller = true)
 
           }
@@ -86,11 +97,11 @@ object FindMatches extends App {
         if (em.foundBy == rule.rule_name) {
           val predTrigger = IntervaltoList(em.trigger.tokenInterval)
           newStatus = newStatus.copy(any=true)
-          println(s"trigger: ${rule.trigger} | ${rule.subtrigger}, controlled: ${rule.controlled} | ${rule.subcontrolled}, controller: ${rule.controller} | ${rule.subcontroller}")
+          println(s"trigger: ${rule.trigger} | ${rule.base_trigger}, controlled: ${rule.controlled} | ${rule.base_controlled}, controller: ${rule.controller} | ${rule.base_controller}")
           println(s"Rule => ${em.foundBy}")
           println(s"trigger => ${predTrigger}")
           val argStatus = fetchArguments(em, rule)
-          if (rule.subtrigger == predTrigger) {
+          if (rule.trigger == predTrigger) {
             newStatus = newStatus.copy(trigger=true)
             println("Trigger Matched")
           }
@@ -102,10 +113,12 @@ object FindMatches extends App {
             newStatus = newStatus.copy(controller=true)
             println("Controller Matched")
           }
-          if (rule.subtrigger == predTrigger && argStatus.controlled && argStatus.controller) {
+          if (rule.trigger == predTrigger && argStatus.controlled && argStatus.controller) {
             newStatus = newStatus.copy(total=true)
             println("Everything Matched")
           }
+          println()
+          println(s"Sentence: ${rule.marked_text}")
           println()
           println(s"True: ${rule.rule}")
           println()
@@ -117,7 +130,7 @@ object FindMatches extends App {
     newStatus
   }
 
-  val fileName = "val_results.json"
+  val fileName = "id_split/train_data_500_results.json"
   println(s"Initializing Reach")
   val reachSystem = PaperReader.reachSystem
   println(s"Done initializing Reach")
@@ -151,18 +164,18 @@ object FindMatches extends App {
             println()
             println(s"totalRules: ${totalRules}")
             println(s"anyMatchCount: ${anyMatchCount}")
-            println(s"totalMatchCount: ${totalMatchCount}")
             println(s"triggerMatchCount: ${triggerMatchCount}")
             println(s"controlledMatchCount: ${controlledMatchCount}")
             println(s"controllerMatchCount: ${controllerMatchCount}")
+            println(s"totalMatchCount: ${totalMatchCount}")
             println()
           } else {
             println("No match")
-            println(s"Tokens ${rule.tokens.mkString(" ")}\n")
+            println(s"Text ${rule.marked_text}\n")
             println(s"True rule ${rule.rule}\n")
             println(s"Predicted rule ${rule.pred0}")
-            println(s"Trigger ${rule.trigger} Controlled ${rule.controlled} Controller ${rule.controller}\n")
-            println(s"Subtrigger ${rule.subtrigger} Subcontrolled ${rule.subcontrolled} Subcontroller ${rule.subcontroller}\n")
+            println(s"Trigger ${rule.base_trigger} Controlled ${rule.base_controlled} Controller ${rule.base_controller}\n")
+            println(s"Subtrigger ${rule.trigger} Subcontrolled ${rule.controlled} Subcontroller ${rule.controller}\n")
             println(s"$boundary\n")
           }
         }

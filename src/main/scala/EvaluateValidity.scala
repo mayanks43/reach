@@ -7,7 +7,7 @@ import io.circe.syntax._
 import scala.io.Source
 import org.clulab.reach.PaperReader
 
-object Evaluate_Validity extends App {
+object EvaluateValidity extends App {
   def addTabsAndReconcatenate(inputString: String, numberOfSpaces: Int): String = {
     val parts = inputString.split("\n")
     val spacePrefix = " " * numberOfSpaces
@@ -15,20 +15,20 @@ object Evaluate_Validity extends App {
     modifiedParts.mkString("\n")
   }
 
-  val fileName = "val_results.json"
+  val fileName = "id_split/train_data_500_results.json"
   val source = Source.fromFile(fileName)
   val jsonString =
       try source.mkString
       finally source.close()
   var validCount = 0
   var totalCount = 0
-  decode[List[Result]](jsonString) match {
+  decode[List[GeneratedRule]](jsonString) match {
     case Right(rules) =>
       rules.zipWithIndex.foreach { case (rule, index) =>
         val rule_yml = s"""
           |rules:
-          |- name: test_rule_${index}
-          |  label: Positive_Activation
+          |- name: ${rule.rule_name}
+          |  label: ${rule.base_type}
           |  pattern: |
           |${addTabsAndReconcatenate(rule.pred0, 4)}
         """.stripMargin

@@ -4,6 +4,7 @@ import json
 from dataclasses import dataclass
 from typing import Optional
 from collections import defaultdict
+from utils import add_tabs_and_reconcatenate
 
 @dataclass
 class Rule:
@@ -129,12 +130,6 @@ rule_template = """
   pattern: |
 {}
 """
-
-def add_tabs_and_reconcatenate(input_string, number_of_spaces):
-    parts = input_string.split("\n")
-    space_prefix = " " * number_of_spaces
-    modified_parts = [space_prefix + part for part in parts]
-    return "\n".join(modified_parts)
 
 def create_directory_if_not_exists(directory):
     if not os.path.exists(directory):
