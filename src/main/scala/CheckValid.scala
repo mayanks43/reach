@@ -1,4 +1,4 @@
-// For rule reduction approach
+// For direct approach
 
 import org.clulab.odin._
 import io.circe.generic.auto._
@@ -8,7 +8,12 @@ import io.circe.syntax._
 import scala.io.Source
 import org.clulab.reach.PaperReader
 
-object EvaluateValidity extends App {
+case class miniRule(
+    text: String,
+    rule: String
+)
+
+object CheckValid extends App {
   def addTabsAndReconcatenate(inputString: String, numberOfSpaces: Int): String = {
     val parts = inputString.split("\n")
     val spacePrefix = " " * numberOfSpaces
@@ -16,22 +21,22 @@ object EvaluateValidity extends App {
     modifiedParts.mkString("\n")
   }
 
-  val fileName = "id_split/train_data_500_results.json"
+  val fileName = "direct_learning/data/val_data_results.json"
   val source = Source.fromFile(fileName)
   val jsonString =
       try source.mkString
       finally source.close()
   var validCount = 0
   var totalCount = 0
-  decode[List[GeneratedRule]](jsonString) match {
+  decode[List[miniRule]](jsonString) match {
     case Right(rules) =>
       rules.zipWithIndex.foreach { case (rule, index) =>
         val rule_yml = s"""
           |rules:
-          |- name: ${rule.rule_name}
-          |  label: ${rule.base_type}
+          |- name: Sample_rule
+          |  label: Negative_activation
           |  pattern: |
-          |${addTabsAndReconcatenate(rule.pred0, 4)}
+          |${addTabsAndReconcatenate(rule.rule, 4)}
         """.stripMargin
         try {
           ExtractorEngine(rule_yml) // Check if a valid Odin rule
@@ -48,4 +53,5 @@ object EvaluateValidity extends App {
   }
   println(s"Valid count: ${validCount}, Total count: ${totalCount}")
 }
+
 
